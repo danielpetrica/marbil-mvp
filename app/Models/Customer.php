@@ -21,5 +21,11 @@ class Customer extends Model
         "date_of_birth" => "date",
     ];
 
+    public function groups()
+    {
+        return $this->belongsToMany(Groups::class, 'customers_groups', 'customer_id', 'group_id')
+            ->through(CustomersGroups::class);
+    }
+
 
 }

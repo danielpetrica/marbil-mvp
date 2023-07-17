@@ -12,4 +12,10 @@ class Groups extends Model
     protected $fillable = [
         "name",
     ];
+
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'customers_groups', 'group_id', 'customer_id')
+            ->through(CustomersGroups::class);
+    }
 }
