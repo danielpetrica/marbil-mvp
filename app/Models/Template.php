@@ -15,6 +15,7 @@ class Template extends Model
         "description",
         "subject",
         "body",
+        "group_id"
     ];
 
 }

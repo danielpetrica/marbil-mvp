@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('campaings', function (Blueprint $table) {
+        Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('groups')
                 ->cascadeOnDelete();
-            $table->date('scheduled_at')->index();
+            $table->dateTime('scheduled_at')->index();
             $table->boolean('is_sent')->default(false);
             $table->boolean('is_scheduled')->default(false)->index();
             $table->timestamps();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('campaings');
+        Schema::dropIfExists('campaigns');
     }
 };

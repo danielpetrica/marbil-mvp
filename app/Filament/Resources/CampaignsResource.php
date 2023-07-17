@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Groups;
+use Filament\Forms\Components\Select;
 use App\Filament\Resources\CampaignsResource\Pages;
 use App\Filament\Resources\CampaignsResource\RelationManagers;
 use App\Models\Campaign;
@@ -28,14 +30,22 @@ class CampaignsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\Toggle::make('is_scheduled')->required() ,
+                Forms\Components\Textarea::make('description')
                     ->required()
+                    ->columnSpan(2)
                     ->maxLength(255),
 
                 Select::make('template_id')
                     ->options(Template::all()->pluck('first_name', 'id'))
                     ->searchable()
                     ->required(),
+
+                Select::make('group_id')
+                                    ->options(Groups::all()->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->required(),
+                Forms\Components\DateTimePicker::make('scheduled_at')->required(),
 
             ]);
     }
@@ -45,13 +55,20 @@ class CampaignsResource extends Resource
         return $table
             ->columns([
                 //
-
+                Tables\Columns\TextColumn::make('name')->sortable(),
+                Tables\Columns\TextColumn::make('description'),
+                Tables\Columns\TextColumn::make('subject'),
+                Tables\Columns\ToggleColumn::make('is_scheduled')->sortable(),
+                Tables\Columns\TextColumn::make('scheduled_at')->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+//                Tables\Actions\Action::make('Send now', )
+//                    ->danger()
+//                    ->modal('sendNow'),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

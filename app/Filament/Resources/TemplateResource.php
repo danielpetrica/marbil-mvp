@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Groups;
+use Filament\Forms\Components\Select;
 use App\Filament\Resources\TemplateResource\Pages;
 use App\Filament\Resources\TemplateResource\RelationManagers;
 use App\Models\Template;
@@ -26,6 +28,8 @@ class TemplateResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+
+
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
@@ -60,14 +64,14 @@ class TemplateResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -75,5 +79,5 @@ class TemplateResource extends Resource
             'create' => Pages\CreateTemplate::route('/create'),
             'edit' => Pages\EditTemplate::route('/{record}/edit'),
         ];
-    }    
+    }
 }
