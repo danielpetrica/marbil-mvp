@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomersGroupsResource\Pages;
-use App\Filament\Resources\CustomersGroupsResource\RelationManagers;
+use App\Models\Customer;
 use App\Models\CustomersGroups;
+use App\Models\Groups;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -23,9 +25,13 @@ class CustomersGroupsResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('customer_id')
+                Select::make('customer_id')
+                    ->options(Customer::all()->pluck('first_name', 'id'))
+                    ->searchable()
                     ->required(),
-                Forms\Components\TextInput::make('group_id')
+                Select::make('group_id')
+                    ->options(Groups::all()->pluck('name', 'id'))
+                    ->searchable()
                     ->required(),
             ]);
     }
@@ -51,14 +57,14 @@ class CustomersGroupsResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -66,5 +72,5 @@ class CustomersGroupsResource extends Resource
             'create' => Pages\CreateCustomersGroups::route('/create'),
             'edit' => Pages\EditCustomersGroups::route('/{record}/edit'),
         ];
-    }    
+    }
 }
