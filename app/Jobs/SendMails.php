@@ -34,10 +34,22 @@ class SendMails implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::html(Blade::render($this->template->body, $this->customer->toArray()),function ($message) {
-            $message->to($this->customer->email)
-                ->subject(Blade::render($this->template->subject, $this->customer->toArray()))
-                ->from(config('mail.from.address'), config('mail.from.name'));
-        });
+
+        $this->sendEmail(
+            Blade::render($this->template->subject, $this->customer->toArray()),
+            Blade::render($this->template->body, $this->customer->toArray()),
+            $this->customer->email
+        );
+    }
+
+    /**
+    @throws EmailSendingException
+    */
+    function sendEmail(string $subject, string $body, string $email): float {
+        Mail::html( $body, function ($message) use ($subject, $email){
+                    $message->to($email)
+                        ->subject($subject)
+                        ->from(config('mail.from.address'), config('mail.from.name'));
+                });
     }
 }
