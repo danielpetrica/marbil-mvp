@@ -28,8 +28,6 @@ class TemplateResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-
-
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),

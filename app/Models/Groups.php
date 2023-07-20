@@ -5,17 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Groups extends Model
 {
     use HasTimestamps;
+
     protected $fillable = [
         "name",
     ];
 
-    public function customers()
+    /**
+     * @return BelongsToMany
+     */
+    public function customer(): BelongsToMany
     {
-        return $this->belongsToMany(Customer::class, 'customers_groups', 'group_id', 'customer_id')
-            ->through(CustomersGroups::class);
+        //$related, $through, $firstKey = null, $secondKey = null, $localKey = null, $secondLocalKey = null
+        return  $this->belongsToMany(Customer::class)->using(CustomersGroups::class);
     }
 }

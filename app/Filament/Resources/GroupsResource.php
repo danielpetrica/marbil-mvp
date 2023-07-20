@@ -6,6 +6,8 @@ use App\Filament\Resources\GroupsResource\Pages;
 use App\Filament\Resources\GroupsResource\RelationManagers;
 use App\Models\Groups;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -26,6 +28,8 @@ class GroupsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+//                CheckboxList::make('customers')
+//                    ->relationship('customers', 'name')
             ]);
     }
 
@@ -38,6 +42,7 @@ class GroupsResource extends Resource
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
+
             ])
             ->filters([
                 //
@@ -49,14 +54,14 @@ class GroupsResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -64,5 +69,5 @@ class GroupsResource extends Resource
             'create' => Pages\CreateGroups::route('/create'),
             'edit' => Pages\EditGroups::route('/{record}/edit'),
         ];
-    }    
+    }
 }

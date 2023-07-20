@@ -14,6 +14,15 @@ class EditCampaigns extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\Action::make('SendCampaignNow')
+                ->label('Send campaign now')
+                ->color('secondary')
+                ->requiresConfirmation()
+                ->action('sendCampaignNow')
         ];
+    }
+
+    public function sendCampaignNow (): void {
+
     }
 }

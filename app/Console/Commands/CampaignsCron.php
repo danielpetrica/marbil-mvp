@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\EmailAction;
 use App\Models\Campaign;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Blade;
@@ -20,6 +21,13 @@ class CampaignsCron extends Command
      * @var string
      */
     protected $description = 'Command description';
+    private EmailAction $emailAction;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->emailAction = new EmailAction();
+    }
 
     /**
      * Execute the console command.
@@ -36,6 +44,8 @@ class CampaignsCron extends Command
             ->with('group')
             ->get();
 
+        $this->info('I have ' . count($campaigns) . 'campaigns for this minute.');
+
         foreach ($campaigns as $campaign) {
             // Send the campaign
             $this->stackMails($campaign);
@@ -44,19 +54,12 @@ class CampaignsCron extends Command
         }
     }
 
-    private function stackMails (mixed $campaign) {
-        // get a campaign group
-        $group = $campaign->group;
-
-        // get group customers
-        $members = $group->customers;
-
-        // get campaign template
-        $template = $campaign->template;
-
-        // enqueue job
-        foreach ($members as $member) {
-//            $job
-        }
+    /**
+     * @param mixed $campaign
+     * @return void
+     */
+    private function stackMails (mixed $campaign): void
+    {
+        $this->emailAction->stackMails($campaign);
     }
 }

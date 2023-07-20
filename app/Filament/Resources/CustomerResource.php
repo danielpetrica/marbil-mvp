@@ -64,14 +64,15 @@ class CustomerResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
+            RelationManagers\GroupsRelationManager::class
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -79,5 +80,5 @@ class CustomerResource extends Resource
             'create' => Pages\CreateCustomer::route('/create'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
-    }    
+    }
 }

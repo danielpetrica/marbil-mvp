@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Classes\EmailSendingException;
 use App\Models\Groups;
 use App\Models\Template;
 use App\Models\Campaign;
@@ -15,7 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SendMails implements ShouldQueue
+class SendMails implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,13 +44,27 @@ class SendMails implements ShouldQueue
     }
 
     /**
-    @throws EmailSendingException
-    */
+     * @throws EmailSendingException
+     */
     function sendEmail(string $subject, string $body, string $email): float {
-        Mail::html( $body, function ($message) use ($subject, $email){
-                    $message->to($email)
-                        ->subject($subject)
-                        ->from(config('mail.from.address'), config('mail.from.name'));
-                });
+        try {
+            Mail::html($body, function ($message) use ($subject, $email) {
+                $message->to($email)
+                    ->subject($subject)
+                    ->from(config('mail.from.address'), config('mail.from.name'));
+            });
+        } catch (\Exception $e) {
+            throw new EmailSendingException( $e->getMessage(), $e->getCode());
+        }
+
+        return 0;
+    }
+
+    /**
+     * The unique ID of the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->campaign->id  . '-' . $this->customer->id;
     }
 }
