@@ -22,6 +22,10 @@ class Groups extends Model
     public function customer(): BelongsToMany
     {
         //$related, $through, $firstKey = null, $secondKey = null, $localKey = null, $secondLocalKey = null
-        return  $this->belongsToMany(Customer::class)->using(CustomersGroups::class);
+        return  $this->belongsToMany(Customer::class,
+            'customers_group',
+            'group_id',
+            'customer_id'
+            )->using(CustomersGroups::class);
     }
 }

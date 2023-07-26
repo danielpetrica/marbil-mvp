@@ -58,7 +58,7 @@ class CampaignsCron extends Command
      * @param mixed $campaign
      * @return void
      */
-    private function stackMails (mixed $campaign): void
+    private function stackMails (Campaign $campaign): void
     {
         $this->emailAction->stackMails($campaign);
     }

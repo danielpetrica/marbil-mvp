@@ -32,6 +32,7 @@ class SendMails implements ShouldQueue, ShouldBeUnique
 
     /**
      * Send mail to customer.
+     * @throws EmailSendingException
      */
     public function handle(): void
     {

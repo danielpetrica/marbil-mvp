@@ -2,6 +2,9 @@
 
 namespace App\Classes;
 
+use App\Jobs\SendMails;
+use App\Models\Campaign;
+
 class EmailAction
 {
 
@@ -9,20 +12,20 @@ class EmailAction
      * @param mixed $campaign
      * @return void
      */
-    public function stackMails(mixed $campaign): void
+    public static function stackMails(Campaign $campaign): void
     {
         // get a campaign group
         $group = $campaign->group;
 
         // get group customers
-        $members = $group->customers;
+        $members = $group->customer;
 
         // get campaign template
         $template = $campaign->template;
 
         // enqueue job
-        foreach ($members as $member) {
-
+        foreach ($members as $customer) {
+            SendMails::dispatch($campaign, $template, $group,  $customer);
         }
     }
 }

@@ -26,12 +26,12 @@ class Campaign extends Model
         "scheduled_at" => "datetime",
     ];
 
-    public function group()
+    public function group(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Groups::class);
     }
 
-    public function template()
+    public function template(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Template::class);
     }
