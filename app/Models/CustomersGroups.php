@@ -10,6 +10,8 @@ class CustomersGroups extends Pivot
 {
     use HasTimestamps;
 
+    public $incrementing = true;
+
     protected $table = 'customers_group';
 
     protected $fillable = [
@@ -17,13 +19,13 @@ class CustomersGroups extends Pivot
         "group_id",
     ];
 
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
-    }
-
-    public function group(): BelongsTo
-    {
-        return $this->belongsTo(Groups::class, 'group_id', 'id');
-    }
+//    public function customer(): BelongsTo
+//    {
+//        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+//    }
+//
+//    public function group(): BelongsTo
+//    {
+//        return $this->belongsTo(Groups::class, 'group_id', 'id');
+//    }
 }

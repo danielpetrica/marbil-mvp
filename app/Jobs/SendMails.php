@@ -8,6 +8,7 @@ use App\Models\Template;
 use App\Models\Campaign;
 use App\Models\Customer;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -36,6 +37,9 @@ class SendMails implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
+//        Log::debug("SendMails->handle", [
+//            'campaign' => $this->campaign
+//        ]);
 
         $this->sendEmail(
             Blade::render($this->template->subject, $this->customer->toArray()),
@@ -52,13 +56,23 @@ class SendMails implements ShouldQueue, ShouldBeUnique
             Mail::html($body, function ($message) use ($subject, $email) {
                 $message->to($email)
                     ->subject($subject)
-                    ->from(config('mail.from.address'), config('mail.from.name'));
+                    ->from(
+                        config('mail.from.address'),
+                        config('mail.from.name'));
             });
-        } catch (\Exception $e) {
+//            Log::debug("Email sent");
+        }
+        catch (\Exception $e) {
+            Log::error($e->getMessage(), [
+                'line' => $e->getLine(),
+                'subject' => $subject,
+                'body' => $body,
+                'email' => $email,
+            ]);
             throw new EmailSendingException( $e->getMessage(), $e->getCode());
         }
 
-        return 0;
+        return true;
     }
 
     /**
@@ -68,4 +82,8 @@ class SendMails implements ShouldQueue, ShouldBeUnique
     {
         return $this->campaign->id  . '-' . $this->customer->id;
     }
+
+    public $uniqueFor = 60;
+
+
 }

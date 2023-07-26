@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\CampaignsResource\Pages;
 
+use App\Classes\EmailAction;
 use App\Filament\Resources\CampaignsResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Log;
 
 class EditCampaigns extends EditRecord
 {
@@ -24,5 +26,7 @@ class EditCampaigns extends EditRecord
 
     public function sendCampaignNow (): void {
 
+//        Log::debug("EditCampaigns->sendCampaignNow", ["record" => $this->record]);
+        EmailAction::stackMails($this->record);
     }
 }

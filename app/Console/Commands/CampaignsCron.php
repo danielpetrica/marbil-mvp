@@ -6,6 +6,8 @@ use App\Classes\EmailAction;
 use App\Models\Campaign;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Log;
+
 class CampaignsCron extends Command
 {
     /**
@@ -44,11 +46,15 @@ class CampaignsCron extends Command
             ->with('group')
             ->get();
 
-        $this->info('I have ' . count($campaigns) . 'campaigns for this minute.');
+
+        $this->info('I have ' . count($campaigns) . ' campaigns for this minute.');
 
         foreach ($campaigns as $campaign) {
             // Send the campaign
             $this->stackMails($campaign);
+
+            $campaign->is_sent = true;
+            $campaign->save();
             // Mark the campaign as sent
             // $campaign->update(['is_sent' => true]);
         }

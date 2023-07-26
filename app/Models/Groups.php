@@ -16,13 +16,15 @@ class Groups extends Model
         "name",
     ];
 
+    protected $with = ['customers'];
     /**
      * @return BelongsToMany
      */
-    public function customer(): BelongsToMany
+    public function customers(): BelongsToMany
     {
         //$related, $through, $firstKey = null, $secondKey = null, $localKey = null, $secondLocalKey = null
-        return  $this->belongsToMany(Customer::class,
+        return  $this->belongsToMany(
+            Customer::class,
             'customers_group',
             'group_id',
             'customer_id'
